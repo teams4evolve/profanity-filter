@@ -14,7 +14,7 @@ sys.stdout.reconfigure(line_buffering=True) if hasattr(sys.stdout, 'reconfigure'
 from pathlib import Path
 from typing import List, Tuple
 
-from audio_profanity_detector_fast import AudioProfanityDetectorFast
+from audio_profanity_detector_fast import AudioProfanityDetectorFast, MissingBinaryError
 from video_cutter import VideoCutter
 from timestamp_merger import TimestampMerger
 from subtitle_processor import SubtitleProcessor
@@ -173,6 +173,11 @@ def main():
             else:
                 print("    ✓ No profanity detected in audio")
             print()
+        except MissingBinaryError as e:
+            print(f"  ✗ ERROR: {e}")
+            print("  Install FFmpeg and ensure ffmpeg/ffprobe are in PATH, then rerun.")
+            print("  Windows: download FFmpeg, add its bin directory to PATH, then reopen terminal.")
+            sys.exit(1)
         except Exception as e:
             print(f"  ✗ ERROR: Audio profanity detection failed: {e}")
             import traceback
